@@ -22,8 +22,23 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/ubuntu_bold"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/tv_shows_most_popular"
+                android:textColor="@color/textIconsColor"
+                android:textSize="@dimen/_14ssp"
+                />
+            
 
         </LinearLayout>
 
