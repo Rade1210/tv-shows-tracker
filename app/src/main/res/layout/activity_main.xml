@@ -39,9 +39,29 @@
                 android:textSize="@dimen/_14ssp"
                 />
 
-            
+                <ImageView
+                    android:id="@+id/imageWatchList"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:contentDescription="@string/app_name"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@drawable/ic_watchlist"
+                    app:tint="@color/textIconsColor"/>
+
+            <ImageView
+                android:id="@+id/imageSearch"
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:contentDescription="@string/app_name"
+                android:padding="@dimen/_2sdp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/textIconsColor"/>
 
         </LinearLayout>
+
+        
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
