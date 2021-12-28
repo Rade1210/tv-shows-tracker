@@ -25,13 +25,31 @@ public class TVShow {
     @SerializedName("image_thumbnail_path")
     private String thumbnail;
 
-    public TVShow(int id, String name, String startDate, String country, String network, String status, String thumbnail) {
-        this.id = id;
-        this.name = name;
-        this.startDate = startDate;
-        this.country = country;
-        this.network = network;
-        this.status = status;
-        this.thumbnail = thumbnail;
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 }
