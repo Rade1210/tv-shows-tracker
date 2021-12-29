@@ -25,7 +25,7 @@ public class BindingAdapters {
                }
            });
        } catch(Exception ignored){
-           
+
        }
    }
 
