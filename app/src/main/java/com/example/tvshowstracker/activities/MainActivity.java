@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private MostPopularTVShowsViewModel viewModel;
     private List<TVShow> tvShows = new ArrayList<>();
     private TVShowsAdapter tvShowsAdapter;
+    private int currentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMostPopularTVShows(){
-        activityMainBinding.setIsLoading(true);
-        viewModel.getMostPopularTVShows(0).observe(this, mostPopularTVShowsResponse -> {
-        activityMainBinding.setIsLoading(false);
+        toggleLoading();
+        viewModel.getMostPopularTVShows(currentPage).observe(this, mostPopularTVShowsResponse -> {
+        toggleLoading();
         if(mostPopularTVShowsResponse != null){
             if(mostPopularTVShowsResponse.getTvShows() != null){
                 tvShows.addAll(mostPopularTVShowsResponse.getTvShows());
@@ -49,4 +50,23 @@ public class MainActivity extends AppCompatActivity {
         }
         });
     }
+
+    private void toggleLoading(){
+        if(currentPage == 1){
+            if(activityMainBinding.getIsLoading() != null && activityMainBinding.getIsLoading()){
+                activityMainBinding.setIsLoading(false);
+            }
+            else{
+                activityMainBinding.setIsLoading(true);
+            }
+        } else{
+            if(activityMainBinding.getIsLoadingMore() != null && activityMainBinding.getIsLoadingMore()){
+                activityMainBinding.setIsLoadingMore(false);
+            }
+            else{
+                activityMainBinding.setIsLoadingMore(true);
+            }
+        }
+    }
+
 }
