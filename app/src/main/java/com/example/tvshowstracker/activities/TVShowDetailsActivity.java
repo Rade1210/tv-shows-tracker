@@ -19,6 +19,8 @@ import com.example.tvshowstracker.adapters.ImageSliderAdapter;
 import com.example.tvshowstracker.databinding.ActivityTvshowDetailsBinding;
 import com.example.tvshowstracker.viewmodels.TVShowDetailsViewModel;
 
+import java.util.Locale;
+
 public class TVShowDetailsActivity extends AppCompatActivity {
 
     private ActivityTvshowDetailsBinding activityTvshowDetailsBinding;
@@ -73,6 +75,22 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                                activityTvshowDetailsBinding.textReadMore.setText(R.string.read_more);
                            }
                        });
+                       activityTvshowDetailsBinding.setRating(
+                               String.format(
+                                       Locale.getDefault(),
+                                       "%.2f",
+                                       Double.parseDouble(tvShowDetailsResponse.getTvShowDetails().getRating())
+                               )
+                       );
+                       if(tvShowDetailsResponse.getTvShowDetails().getGenres() != null){
+                           activityTvshowDetailsBinding.setGenre(tvShowDetailsResponse.getTvShowDetails().getGenres()[0]);
+                       } else{
+                           activityTvshowDetailsBinding.setGenre("N/A");
+                       }
+                       activityTvshowDetailsBinding.setRuntime(tvShowDetailsResponse.getTvShowDetails().getRuntime() + "Min");
+                       activityTvshowDetailsBinding.viewDivider1.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.layoutMisc.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.viewDivider2.setVisibility(View.VISIBLE);
                        loadBasicTVShowDetails();
                    }
                 }
