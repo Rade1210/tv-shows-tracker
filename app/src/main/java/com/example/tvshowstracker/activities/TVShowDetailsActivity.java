@@ -2,11 +2,13 @@ package com.example.tvshowstracker.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -50,6 +52,27 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                                tvShowDetailsResponse.getTvShowDetails().getImagePath()
                        );
                        activityTvshowDetailsBinding.imageTVShow.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.setDescription(
+                               String.valueOf(
+                                       HtmlCompat.fromHtml(
+                                               tvShowDetailsResponse.getTvShowDetails().getDescription(),
+                                               HtmlCompat.FROM_HTML_MODE_LEGACY
+                                       )
+                               )
+                       );
+                       activityTvshowDetailsBinding.textDescription.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.textReadMore.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.textReadMore.setOnClickListener(view -> {
+                           if(activityTvshowDetailsBinding.textReadMore.getText().toString().equals("Read More")){
+                               activityTvshowDetailsBinding.textDescription.setMaxLines(Integer.MAX_VALUE);
+                               activityTvshowDetailsBinding.textDescription.setEllipsize(null);
+                               activityTvshowDetailsBinding.textReadMore.setText(R.string.read_less);
+                           } else{
+                               activityTvshowDetailsBinding.textDescription.setMaxLines(4);
+                               activityTvshowDetailsBinding.textDescription.setEllipsize(TextUtils.TruncateAt.END);
+                               activityTvshowDetailsBinding.textReadMore.setText(R.string.read_more);
+                           }
+                       });
                        loadBasicTVShowDetails();
                    }
                 }
