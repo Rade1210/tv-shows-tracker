@@ -8,18 +8,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.tvshowstracker.R;
+import com.example.tvshowstracker.adapters.EpisodesAdapter;
 import com.example.tvshowstracker.adapters.ImageSliderAdapter;
 import com.example.tvshowstracker.databinding.ActivityTvshowDetailsBinding;
+import com.example.tvshowstracker.databinding.LayoutEpisodesBottomSheetBinding;
 import com.example.tvshowstracker.viewmodels.TVShowDetailsViewModel;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.Locale;
 
@@ -27,6 +34,8 @@ public class TVShowDetailsActivity extends AppCompatActivity {
 
     private ActivityTvshowDetailsBinding activityTvshowDetailsBinding;
     private TVShowDetailsViewModel tvShowDetailsViewModel;
+    private BottomSheetDialog episodesBottomSheetDialog;
+    private LayoutEpisodesBottomSheetBinding layoutEpisodesBottomSheetBinding;
 
 
     @Override
@@ -100,6 +109,37 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                        });
                        activityTvshowDetailsBinding.buttonWebsite.setVisibility(View.VISIBLE);
                        activityTvshowDetailsBinding.buttonEpisodes.setVisibility(View.VISIBLE);
+                       activityTvshowDetailsBinding.buttonEpisodes.setOnClickListener(view -> {
+                           if(episodesBottomSheetDialog == null){
+                               episodesBottomSheetDialog = new BottomSheetDialog(TVShowDetailsActivity.this);
+                               layoutEpisodesBottomSheetBinding = DataBindingUtil.inflate(
+                                       LayoutInflater.from(TVShowDetailsActivity.this),
+                                       R.layout.layout_episodes_bottom_sheet,
+                                       findViewById(R.id.episodesContainer),
+                                       false
+                               );
+                               episodesBottomSheetDialog.setContentView(layoutEpisodesBottomSheetBinding.getRoot());
+                               layoutEpisodesBottomSheetBinding.episodesRecycleView.setAdapter(
+                                       new EpisodesAdapter(tvShowDetailsResponse.getTvShowDetails().getEpisodes())
+                               );
+                               layoutEpisodesBottomSheetBinding.textTitle.setText(
+                                       String.format("Episodes | %s", getIntent().getStringExtra("name"))
+                               );
+                               layoutEpisodesBottomSheetBinding.imageClose.setOnClickListener(view1 -> episodesBottomSheetDialog.dismiss());
+                           }
+                           // ---- Optional section start ---- //
+                           FrameLayout frameLayout = episodesBottomSheetDialog.findViewById(
+                                   com.google.android.material.R.id.design_bottom_sheet
+                           );
+                           if(frameLayout != null){
+                               BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from(frameLayout);
+                               bottomSheetBehavior.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
+                               bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                           }
+                           // ---- Optional section end ---- //
+
+                           episodesBottomSheetDialog.show();
+                       });
                        loadBasicTVShowDetails();
                    }
                 }
