@@ -43,6 +43,7 @@ public class TVShowDetailsActivity extends AppCompatActivity {
     private BottomSheetDialog episodesBottomSheetDialog;
     private LayoutEpisodesBottomSheetBinding layoutEpisodesBottomSheetBinding;
     private TVShow tvShow;
+    private Boolean isTVShowAvailableInWatchlist = false;
 
 
     @Override
@@ -56,7 +57,20 @@ public class TVShowDetailsActivity extends AppCompatActivity {
         tvShowDetailsViewModel = new ViewModelProvider(this).get(TVShowDetailsViewModel.class);
         activityTvshowDetailsBinding.imageBack.setOnClickListener(view -> onBackPressed());
         tvShow = (TVShow) getIntent().getSerializableExtra("tvShow");
+        checkTVShowInWatchlist();
         getTVShowDetails();
+    }
+
+    private void checkTVShowInWatchlist(){
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(tvShowDetailsViewModel.getTVShowFromWatchlist(String.valueOf(tvShow.getId()))
+        .subscribeOn(Schedulers.computation())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(tvShow -> {
+            isTVShowAvailableInWatchlist = true;
+            activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_added);
+            compositeDisposable.dispose();
+        }));
     }
 
     private void getTVShowDetails() {
@@ -149,15 +163,30 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                             episodesBottomSheetDialog.show();
                         });
 
-                        activityTvshowDetailsBinding.imageWatchlist.setOnClickListener(view ->
-                                new CompositeDisposable().add(tvShowDetailsViewModel.addToWatchlist(tvShow)
-                                .subscribeOn(Schedulers.io())
+                        activityTvshowDetailsBinding.imageWatchlist.setOnClickListener(view -> {
+                            CompositeDisposable compositeDisposable = new CompositeDisposable();
+                            if(isTVShowAvailableInWatchlist){
+                                compositeDisposable.add(tvShowDetailsViewModel.removeTVShowFromWatchlist(tvShow)
+                                .subscribeOn(Schedulers.computation())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> {
-                                    activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_added);
-                                    Toast.makeText(getApplicationContext(), "Added to watchlist", Toast.LENGTH_SHORT).show();
-                                })
-                        ));
+                                    isTVShowAvailableInWatchlist = false;
+                                    activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_watchlist);
+                                    Toast.makeText(getApplicationContext(), "Removed from watchlist", Toast.LENGTH_SHORT).show();
+                                    compositeDisposable.dispose();
+                                }));
+                            } else{
+                                compositeDisposable.add(tvShowDetailsViewModel.addToWatchlist(tvShow)
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(() -> {
+                                            activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_added);
+                                            Toast.makeText(getApplicationContext(), "Added to watchlist", Toast.LENGTH_SHORT).show();
+                                            compositeDisposable.dispose();
+                                        })
+                                );
+                            }
+                        });
                         activityTvshowDetailsBinding.imageWatchlist.setVisibility(View.VISIBLE);
                         loadBasicTVShowDetails();
                     }
