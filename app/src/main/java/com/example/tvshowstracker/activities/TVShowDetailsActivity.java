@@ -26,6 +26,7 @@ import com.example.tvshowstracker.adapters.ImageSliderAdapter;
 import com.example.tvshowstracker.databinding.ActivityTvshowDetailsBinding;
 import com.example.tvshowstracker.databinding.LayoutEpisodesBottomSheetBinding;
 import com.example.tvshowstracker.models.TVShow;
+import com.example.tvshowstracker.utilities.TempDataHolder;
 import com.example.tvshowstracker.viewmodels.TVShowDetailsViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -171,6 +172,7 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(() -> {
                                     isTVShowAvailableInWatchlist = false;
+                                    TempDataHolder.IS_WATCHLIST_UPDATED = true;
                                     activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_watchlist);
                                     Toast.makeText(getApplicationContext(), "Removed from watchlist", Toast.LENGTH_SHORT).show();
                                     compositeDisposable.dispose();
@@ -180,6 +182,7 @@ public class TVShowDetailsActivity extends AppCompatActivity {
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(AndroidSchedulers.mainThread())
                                         .subscribe(() -> {
+                                            TempDataHolder.IS_WATCHLIST_UPDATED = true;
                                             activityTvshowDetailsBinding.imageWatchlist.setImageResource(R.drawable.ic_added);
                                             Toast.makeText(getApplicationContext(), "Added to watchlist", Toast.LENGTH_SHORT).show();
                                             compositeDisposable.dispose();
