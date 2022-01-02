@@ -16,7 +16,7 @@ import io.reactivex.Flowable;
 @Dao
 public interface TvShowDao {
 
-    @Query("SELECT * FROM tvshows")
+    @Query("SELECT * FROM tvShows")
     Flowable<List<TVShow>> getWatchlist();
 
 
@@ -24,7 +24,7 @@ public interface TvShowDao {
     Completable addToWatchlist(TVShow tvShow);
 
     @Delete
-    void removeFromWatchlist(TVShow tvShow);
+    Completable removeFromWatchlist(TVShow tvShow);
 
 
 
