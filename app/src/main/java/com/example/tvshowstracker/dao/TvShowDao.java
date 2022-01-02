@@ -16,14 +16,16 @@ import io.reactivex.Flowable;
 @Dao
 public interface TvShowDao {
 
-    @Query("SELECT * FROM tvShows")
+    @Query("SELECT * FROM tvshows")
     Flowable<List<TVShow>> getWatchlist();
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable addToWatchlist(TVShow tvShow);
 
     @Delete
     void removeFromWatchlist(TVShow tvShow);
+
 
 
 }
